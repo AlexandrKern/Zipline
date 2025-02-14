@@ -6,18 +6,20 @@ public class PathToEndPoint : MonoBehaviour
     private LineController _lineController;
     private PlayerPoint _playerPoint;
 
-    [SerializeField] private People [] _people;
+    [SerializeField] private Cats [] _cats;
     [SerializeField] private float _speed = 2f;
     [SerializeField] private float _moveInterval = 0.5f;
     private bool _isPathActive = false;
 
     private Vector2[] _pathPoints;
 
-    private int _cuerrentHumanIndex = 0;
+    private int _cuerrentCatIndex = 0;
 
     [SerializeField] private Color _assignedColor;
 
     private Color _currentColor;
+
+    private IInput _input;
 
 
 
@@ -25,11 +27,12 @@ public class PathToEndPoint : MonoBehaviour
     {
         _lineController = LineController.Instance;
         _playerPoint = PlayerPoint.Instance;
+        _input = InputController.Instance.input;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButton(0) && _playerPoint.isPathReady&&!_isPathActive)
+        if (_input.MoveCats() && _playerPoint.isPathReady&&!_isPathActive)
         {
             StartCoroutine(StartingFollowPath());
         }
@@ -40,7 +43,7 @@ public class PathToEndPoint : MonoBehaviour
 
     private void ChecksPeopleAreOnWay()
     {
-        bool isAnyoneAtStart = _people.Any(human => human.startedPath);
+        bool isAnyoneAtStart = _cats.Any(human => human.startedPath);
 
         if (_playerPoint.isFixed != isAnyoneAtStart)
         {
@@ -68,7 +71,7 @@ public class PathToEndPoint : MonoBehaviour
 
     private void Move()
     {
-        foreach (var human in _people)
+        foreach (var human in _cats)
         {
             
             if (human.startedPath && !human.isFinished)
@@ -80,14 +83,14 @@ public class PathToEndPoint : MonoBehaviour
                     Vector2 targetPoint = _pathPoints[human.currentPointIndex];
 
                    
-                    human.human.transform.position = Vector2.MoveTowards(
-                        human.human.transform.position,
+                    human.cat.transform.position = Vector2.MoveTowards(
+                        human.cat.transform.position,
                         targetPoint,
                         _speed * Time.deltaTime
                     );
 
                    
-                    if (Vector2.Distance(human.human.transform.position, targetPoint) < 0.1f)
+                    if (Vector2.Distance(human.cat.transform.position, targetPoint) < 0.1f)
                     {
                         human.currentPointIndex++;
                     }
@@ -104,31 +107,28 @@ public class PathToEndPoint : MonoBehaviour
     private void FollowPath()
     {
         SetPathPoints();
-        if (_cuerrentHumanIndex >= _people.Length)
+        if (_cuerrentCatIndex >= _cats.Length)
         {
             Debug.Log("Все люди спасены");
             return;
         }
 
-        if (!_people[_cuerrentHumanIndex].isFinished && !_people[_cuerrentHumanIndex].startedPath)
+        if (!_cats[_cuerrentCatIndex].isFinished && !_cats[_cuerrentCatIndex].startedPath)
         {
-            _people[_cuerrentHumanIndex].startedPath = true;
+            _cats[_cuerrentCatIndex].startedPath = true;
         }
 
-        if (_people[_cuerrentHumanIndex].startedPath)
+        if (_cats[_cuerrentCatIndex].startedPath)
         {
-            _cuerrentHumanIndex++;
+            _cuerrentCatIndex++;
         }
-
-
-
     }
 
     private IEnumerator StartingFollowPath()
     {
         _isPathActive = true;
 
-        while (Input.GetMouseButton(0)) 
+        while (_input.MoveCats()) 
         {
             FollowPath();
             yield return new WaitForSeconds(_moveInterval);
@@ -138,12 +138,12 @@ public class PathToEndPoint : MonoBehaviour
     }
 
     [System.Serializable]
-    public class People
+    public class Cats
     {
         [HideInInspector] public int currentPointIndex;
         [HideInInspector] public bool startedPath;
         [HideInInspector] public bool isFinished;
-        public GameObject human;
+        public GameObject cat;
     }
 
 
