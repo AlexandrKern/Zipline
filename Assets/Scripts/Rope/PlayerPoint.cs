@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class PlayerPoint : MonoBehaviour
+public class PlayerPoint : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     #region Singleton
     public static PlayerPoint Instance;
@@ -23,7 +24,6 @@ public class PlayerPoint : MonoBehaviour
     [HideInInspector] public bool isPathReady = false;
     [HideInInspector] public bool isFixed = false;
 
-
     private Vector3 _offset;
     private Color _spriteColor;
 
@@ -31,41 +31,48 @@ public class PlayerPoint : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private LineController _ropeController;
 
+    private IInput _input;
+    private Camera _mainCamera;
+
+    private Vector3 _minScreenBounds;
+    private Vector3 _maxScreenBounds;
+
     private void Start()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _spriteColor = _spriteRenderer.color;
         _rb = GetComponent<Rigidbody2D>();
         _ropeController = LineController.Instance;
+        _input = InputController.Instance.input;
+        _mainCamera = Camera.main;
 
-    
+        _minScreenBounds = _mainCamera.ViewportToWorldPoint(new Vector3(0, 0, transform.position.z - _mainCamera.transform.position.z));
+        _maxScreenBounds = _mainCamera.ViewportToWorldPoint(new Vector3(1, 1, transform.position.z - _mainCamera.transform.position.z));
     }
 
-    private void OnMouseDown()
+    public void OnPointerDown(PointerEventData eventData)
     {
         isPathReady = false;
-        _offset = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePosition = _mainCamera.ScreenToWorldPoint(_input.InputPosition());
+        _offset = transform.position - mousePosition;
         _offset.z = 0;
     }
 
-    private void OnMouseDrag()
+    public void OnDrag(PointerEventData eventData)
     {
         if (isFixed) return;
 
-        Vector3 targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + _offset;
+        Vector3 targetPosition = _mainCamera.ScreenToWorldPoint(_input.InputPosition()) + _offset;
         targetPosition.z = transform.position.z;
 
-        Vector3 minScreenBounds = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, transform.position.z - Camera.main.transform.position.z));
-        Vector3 maxScreenBounds = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, transform.position.z - Camera.main.transform.position.z));
-
-        targetPosition.x = Mathf.Clamp(targetPosition.x, minScreenBounds.x, maxScreenBounds.x);
-        targetPosition.y = Mathf.Clamp(targetPosition.y, minScreenBounds.y, maxScreenBounds.y);
+        targetPosition.x = Mathf.Clamp(targetPosition.x, _minScreenBounds.x, _maxScreenBounds.x);
+        targetPosition.y = Mathf.Clamp(targetPosition.y, _minScreenBounds.y, _maxScreenBounds.y);
 
         Vector2 newPosition = Vector2.MoveTowards(_rb.position, targetPosition, _maxSpeed * Time.deltaTime);
         _rb.MovePosition(newPosition);
     }
 
-    private void OnMouseUp()
+    public void OnPointerUp(PointerEventData eventData)
     {
         if (isEndPoint) isPathReady = true;
     }
@@ -74,6 +81,7 @@ public class PlayerPoint : MonoBehaviour
     {
         _spriteRenderer.color = color;
     }
+
     public void ResetColor()
     {
         _spriteRenderer.color = _spriteColor;
@@ -84,3 +92,5 @@ public class PlayerPoint : MonoBehaviour
         return _spriteRenderer.color;
     }
 }
+
+
