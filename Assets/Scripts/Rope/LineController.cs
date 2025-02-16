@@ -138,7 +138,7 @@ public class LineController : MonoBehaviour
         float ropeDistance = Vector2.Distance((Vector2)_lineRenderer.GetPosition(2), (Vector2)player.transform.position);
         Vector2 rayDirection = (Vector2)_lineRenderer.GetPosition(2) - (Vector2)player.transform.position;
 
-        RaycastHit2D hit = Physics2D.Raycast((Vector2)player.transform.position, rayDirection, ropeDistance * 0.95f, wrapLayerMask);
+        RaycastHit2D hit = Physics2D.Raycast((Vector2)player.transform.position, rayDirection, ropeDistance, wrapLayerMask);
 
         if (hit.collider != null)
             isLineToSecondPivotClear = false;
@@ -202,7 +202,7 @@ public class LineController : MonoBehaviour
     {
         Vector3 pointToPush = _lineRenderer.GetPosition(1);
         Vector2 pushVector = pointToPush - (Vector3)rgbdWrapped.worldCenterOfMass;
-        pushVector = Vector2.ClampMagnitude(pushVector, _pushOutIncrement * 5f);    
+        pushVector = Vector2.ClampMagnitude(pushVector, _pushOutIncrement * 7f);    
         pointToPush += (Vector3)pushVector;
         _lineRenderer.SetPosition(1, pointToPush);
     }
