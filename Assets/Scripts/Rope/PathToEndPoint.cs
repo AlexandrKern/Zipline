@@ -3,10 +3,26 @@ using System.Linq;
 using UnityEngine;
 public class PathToEndPoint : MonoBehaviour
 {
+    #region Singleton
+    public static PathToEndPoint Instance {  get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    #endregion
+
     private LineController _lineController;
     private PlayerPoint _playerPoint;
 
-    [SerializeField] private Cats [] _cats;
+    [SerializeField] private Cat [] _cats;
     [SerializeField] private float _speed = 2f;
     [SerializeField] private float _moveInterval = 0.5f;
     private bool _isPathActive = false;
@@ -37,11 +53,11 @@ public class PathToEndPoint : MonoBehaviour
             StartCoroutine(StartingFollowPath());
         }
         Move();
-        ChecksPeopleAreOnWay();
+        ChecksCatAreOnWay();
     }
 
 
-    private void ChecksPeopleAreOnWay()
+    private void ChecksCatAreOnWay()
     {
         bool isAnyoneAtStart = _cats.Any(human => human.startedPath);
 
@@ -68,37 +84,51 @@ public class PathToEndPoint : MonoBehaviour
         _pathPoints = _lineController.GetColliderPoints();
         System.Array.Reverse(_pathPoints);
     }
+    public void StopCatOnPath(Cat cat)
+    {
+        cat.startedPath = false;
+        cat.isFinished = true;
 
+        cat.currentPointIndex = 0;
+
+        Rigidbody2D rb = cat.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.velocity = Vector2.zero; 
+            rb.gravityScale = 1f; 
+        }
+    }
     private void Move()
     {
-        foreach (var human in _cats)
+        foreach (var cat in _cats)
         {
             
-            if (human.startedPath && !human.isFinished)
+            if (cat.startedPath && !cat.isFinished)
             {
                 
-                if (human.currentPointIndex < _pathPoints.Length)
+                if (cat.currentPointIndex < _pathPoints.Length)
                 {
                     
-                    Vector2 targetPoint = _pathPoints[human.currentPointIndex];
+                    Vector2 targetPoint = _pathPoints[cat.currentPointIndex];
 
                    
-                    human.cat.transform.position = Vector2.MoveTowards(
-                        human.cat.transform.position,
+                    cat.transform.position = Vector2.MoveTowards(
+                        cat.transform.position,
                         targetPoint,
                         _speed * Time.deltaTime
                     );
 
                    
-                    if (Vector2.Distance(human.cat.transform.position, targetPoint) < 0.1f)
+                    if (Vector2.Distance(cat.transform.position, targetPoint) < 0.1f)
                     {
-                        human.currentPointIndex++;
+                        cat.currentPointIndex++;
                     }
                 }
                 else
                 {
-                    human.isFinished = true;
-                    human.startedPath = false;
+                    cat.isFinished = true;
+                    cat.startedPath = false;
                 }
             }
         }
@@ -137,14 +167,7 @@ public class PathToEndPoint : MonoBehaviour
         _isPathActive = false;
     }
 
-    [System.Serializable]
-    public class Cats
-    {
-        [HideInInspector] public int currentPointIndex;
-        [HideInInspector] public bool startedPath;
-        [HideInInspector] public bool isFinished;
-        public GameObject cat;
-    }
+  
 
 
 
