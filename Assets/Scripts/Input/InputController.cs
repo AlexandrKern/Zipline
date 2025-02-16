@@ -27,8 +27,8 @@ public class InputController : MonoBehaviour
                 IsDesktop = false;
                 break;
             case DeviceType.Desktop:
-                input = new InputTouch();
-                IsDesktop = false;
+                input = new InputMause();
+                IsDesktop = true;
                 break;
         }
     }
