@@ -1,10 +1,9 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class PlayerPoint : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class PlayerPoint : MonoBehaviour
 {
     #region Singleton
-    public static PlayerPoint Instance;
+    public static PlayerPoint Instance { get; private set; }
     private void Awake()
     {
         if (Instance == null)
@@ -27,6 +26,7 @@ public class PlayerPoint : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private Vector3 _offset;
     private Color _spriteColor;
 
+    private Collider2D _collider;
     private Rigidbody2D _rb;
     private SpriteRenderer _spriteRenderer;
     private LineController _ropeController;
@@ -37,6 +37,8 @@ public class PlayerPoint : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private Vector3 _minScreenBounds;
     private Vector3 _maxScreenBounds;
 
+    private bool _isDesktop;
+
     private void Start()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -44,37 +46,77 @@ public class PlayerPoint : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         _rb = GetComponent<Rigidbody2D>();
         _ropeController = LineController.Instance;
         _input = InputController.Instance.input;
+        _collider = GetComponent<Collider2D>();
         _mainCamera = Camera.main;
+        _isDesktop = InputController.Instance.IsDesktop;
 
-        _minScreenBounds = _mainCamera.ViewportToWorldPoint(new Vector3(0, 0, transform.position.z - _mainCamera.transform.position.z));
-        _maxScreenBounds = _mainCamera.ViewportToWorldPoint(new Vector3(1, 1, transform.position.z - _mainCamera.transform.position.z));
+        _minScreenBounds = _mainCamera.ViewportToWorldPoint(new Vector3(0, 0, 0));
+        _maxScreenBounds = _mainCamera.ViewportToWorldPoint(new Vector3(1, 1, 0));
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    private void Update()
+    {
+        if (_isDesktop) return;
+
+        if (_input.MoveCats())
+        {
+            Vector3 touchPosition = _mainCamera.ScreenToWorldPoint(_input.InputPosition());
+            Vector2 touchPosition2D = new Vector2(touchPosition.x, touchPosition.y);
+
+            if (_collider.OverlapPoint(touchPosition2D))
+            {
+                isPathReady = false;
+                GetOffset();
+            }
+
+            if (!isFixed)
+            {
+                Move();
+            }
+            else if (isEndPoint)
+            {
+                isPathReady = true;
+            }
+        }
+    }
+
+    private void OnMouseDown()
     {
         isPathReady = false;
-        Vector3 mousePosition = _mainCamera.ScreenToWorldPoint(_input.InputPosition());
-        _offset = transform.position - mousePosition;
-        _offset.z = 0;
+        GetOffset();
     }
 
-    public void OnDrag(PointerEventData eventData)
+    private void OnMouseDrag()
     {
         if (isFixed) return;
+        Move();
+    }
 
+    private void OnMouseUp()
+    {
+        if (isEndPoint) isPathReady = true;
+    }
+
+    private void Move()
+    {
         Vector3 targetPosition = _mainCamera.ScreenToWorldPoint(_input.InputPosition()) + _offset;
         targetPosition.z = transform.position.z;
 
-        targetPosition.x = Mathf.Clamp(targetPosition.x, _minScreenBounds.x, _maxScreenBounds.x);
-        targetPosition.y = Mathf.Clamp(targetPosition.y, _minScreenBounds.y, _maxScreenBounds.y);
+        targetPosition = new Vector3(
+            Mathf.Clamp(targetPosition.x, _minScreenBounds.x, _maxScreenBounds.x),
+            Mathf.Clamp(targetPosition.y, _minScreenBounds.y, _maxScreenBounds.y),
+            0
+        );
 
         Vector2 newPosition = Vector2.MoveTowards(_rb.position, targetPosition, _maxSpeed * Time.deltaTime);
         _rb.MovePosition(newPosition);
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    private void GetOffset()
     {
-        if (isEndPoint) isPathReady = true;
+        Vector3 position = _mainCamera.ScreenToWorldPoint(_input.InputPosition());
+        _offset = transform.position - position;
+        _offset.z = 0;
     }
 
     public void SetColor(Color color)
@@ -92,5 +134,9 @@ public class PlayerPoint : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         return _spriteRenderer.color;
     }
 }
+
+
+
+
 
 
