@@ -85,7 +85,6 @@ public class PathToEndPoint : MonoBehaviour
         System.Array.Reverse(_pathPoints);
     }
 
-    [System.Obsolete]
     public void StopCatOnPath(Cat cat)
     {
         cat.startedPath = false;
@@ -96,7 +95,7 @@ public class PathToEndPoint : MonoBehaviour
         Rigidbody2D rb = cat.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
-            rb.isKinematic = false;
+            rb.bodyType = RigidbodyType2D.Dynamic;
             rb.linearVelocity = Vector2.zero; 
             rb.gravityScale = 1f; 
         }
