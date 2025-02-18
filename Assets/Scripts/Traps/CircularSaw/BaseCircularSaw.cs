@@ -1,15 +1,14 @@
 using UnityEngine;
 
-public class CircularSaw : MonoBehaviour
+public class BaseCircularSaw : MonoBehaviour
 {
     private PathToEndPoint _pathToEndPoint;
 
-    private void Start()
+    public virtual void Start()
     {
         _pathToEndPoint = PathToEndPoint.Instance;
     }
 
-    [System.Obsolete]
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Cat cat = collision.GetComponent<Cat>();
