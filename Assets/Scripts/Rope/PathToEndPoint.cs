@@ -84,6 +84,8 @@ public class PathToEndPoint : MonoBehaviour
         _pathPoints = _lineController.GetColliderPoints();
         System.Array.Reverse(_pathPoints);
     }
+
+    [System.Obsolete]
     public void StopCatOnPath(Cat cat)
     {
         cat.startedPath = false;
@@ -95,7 +97,7 @@ public class PathToEndPoint : MonoBehaviour
         if (rb != null)
         {
             rb.isKinematic = false;
-            rb.velocity = Vector2.zero; 
+            rb.linearVelocity = Vector2.zero; 
             rb.gravityScale = 1f; 
         }
     }
@@ -139,7 +141,7 @@ public class PathToEndPoint : MonoBehaviour
         SetPathPoints();
         if (_cuerrentCatIndex >= _cats.Length)
         {
-            Debug.Log("Все люди спасены");
+            Debug.Log("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
             return;
         }
 

@@ -44,19 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b906b795b20baa442b8f8769dfb8bc51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _people:
-  - currentPointIndex: 0
-    startedPath: 0
-    isFinished: 0
-    human: {fileID: 0}
-  - currentPointIndex: 0
-    startedPath: 0
-    isFinished: 0
-    human: {fileID: 0}
-  - currentPointIndex: 0
-    startedPath: 0
-    isFinished: 0
-    human: {fileID: 0}
+  _cats:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _speed: 3
   _moveInterval: 1
   _assignedColor: {r: 0, g: 0, b: 0, a: 1}

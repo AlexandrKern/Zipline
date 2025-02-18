@@ -169,4 +169,3 @@ MonoBehaviour:
   currentPointIndex: 0
   startedPath: 0
   isFinished: 0
-  cat: {fileID: 4787961028155635890}

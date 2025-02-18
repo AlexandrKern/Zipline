@@ -9,6 +9,7 @@ public class CircularSaw : MonoBehaviour
         _pathToEndPoint = PathToEndPoint.Instance;
     }
 
+    [System.Obsolete]
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Cat cat = collision.GetComponent<Cat>();
