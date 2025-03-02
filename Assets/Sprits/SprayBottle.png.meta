@@ -1,10 +1,22 @@
 fileFormatVersion: 2
-guid: 8e2046770a390c9438e44bd93a7f8964
+guid: 19d9b21c7c1fc0c44886386c47f8a262
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4319395737909131107
-    second: Pistol_0
+      213: 704317293299470304
+    second: SprayBottle_0
+  - first:
+      213: 1534693672436559329
+    second: SprayBottle_1
+  - first:
+      213: -8097259278441830976
+    second: SprayBottle_2
+  - first:
+      213: -6662027575613058082
+    second: SprayBottle_3
+  - first:
+      213: -421893181221760101
+    second: SprayBottle_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +58,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -152,13 +164,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Pistol_0
+      name: SprayBottle_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 2399
-        height: 1286
+        x: 160
+        y: 362
+        width: 147
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -167,8 +179,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 367f86ad98391fb30800000000000000
-      internalID: 4319395737909131107
+      spriteID: 0ef874cb8dc36c900800000000000000
+      internalID: 704317293299470304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SprayBottle_1
+      rect:
+        serializedVersion: 2
+        x: 306
+        y: 411
+        width: 21
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1edee9093c35c4510800000000000000
+      internalID: 1534693672436559329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SprayBottle_2
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 336
+        width: 66
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c52d3e5691c0af80800000000000000
+      internalID: -8097259278441830976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SprayBottle_3
+      rect:
+        serializedVersion: 2
+        x: 268
+        y: 339
+        width: 58
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed31ab78739bb83a0800000000000000
+      internalID: -6662027575613058082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SprayBottle_4
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 119
+        width: 126
+        height: 218
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b931e101362252af0800000000000000
+      internalID: -421893181221760101
       vertices: []
       indices: 
       edges: []
@@ -177,7 +277,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -187,7 +287,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Pistol_0: 4319395737909131107
+      SprayBottle_0: 704317293299470304
+      SprayBottle_1: 1534693672436559329
+      SprayBottle_2: -8097259278441830976
+      SprayBottle_3: -6662027575613058082
+      SprayBottle_4: -421893181221760101
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
